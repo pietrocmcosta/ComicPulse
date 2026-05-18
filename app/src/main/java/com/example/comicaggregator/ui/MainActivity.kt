@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,17 +28,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.comicaggregator.data.parser.GetComicsParserImpl
+import com.example.comicaggregator.ComicPulseApp
 import com.example.comicaggregator.data.repository.ComicRepositoryImpl
 import com.example.comicaggregator.ui.screen.ComicDetailScreen
 import com.example.comicaggregator.ui.screen.ComicListScreen
 import com.example.comicaggregator.ui.screen.ComicReaderScreen
 import com.example.comicaggregator.ui.screen.LibraryScreen
+import com.example.comicaggregator.ui.screen.SettingsScreen
 import com.example.comicaggregator.ui.viewmodel.ComicDetailViewModel
 import com.example.comicaggregator.ui.viewmodel.ComicReaderViewModel
 import com.example.comicaggregator.ui.viewmodel.ComicViewModel
 import com.example.comicaggregator.ui.viewmodel.LibraryViewModel
-import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -46,8 +47,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val parser = GetComicsParserImpl()
-        val repository = ComicRepositoryImpl(parser)
+        // Access the global parser registry from the Application class
+        val app = application as ComicPulseApp
+        val parserRegistry = app.parserRegistry
+
+        // Create a registry-backed repository that delegates to the active parser
+        val repository = ComicRepositoryImpl(parserRegistry)
 
         setContent {
             MaterialTheme {
@@ -107,6 +112,25 @@ class MainActivity : ComponentActivity() {
                                     selected = currentRoute == "downloads",
                                     onClick = {
                                         navController.navigate("downloads") {
+                                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    },
+                                    colors = NavigationBarItemDefaults.colors(
+                                        selectedIconColor = Color(0xFF00F2FE),
+                                        selectedTextColor = Color(0xFF00F2FE),
+                                        unselectedIconColor = Color(0xFF9E9EB2),
+                                        unselectedTextColor = Color(0xFF9E9EB2),
+                                        indicatorColor = Color(0xFF161622)
+                                    )
+                                )
+                                NavigationBarItem(
+                                    icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
+                                    label = { Text("Settings") },
+                                    selected = currentRoute == "settings",
+                                    onClick = {
+                                        navController.navigate("settings") {
                                             popUpTo(navController.graph.startDestinationId) { saveState = true }
                                             launchSingleTop = true
                                             restoreState = true
@@ -182,6 +206,13 @@ class MainActivity : ComponentActivity() {
                                         )
                                         navController.navigate("reader?uri=$encodedUri&isCbr=${comic.isCbr}&title=$encodedTitle")
                                     }
+                                )
+                            }
+
+                            composable("settings") {
+                                SettingsScreen(
+                                    parserRegistry = parserRegistry,
+                                    onBackClick = { navController.popBackStack() }
                                 )
                             }
 

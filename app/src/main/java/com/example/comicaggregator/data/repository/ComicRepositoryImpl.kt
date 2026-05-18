@@ -2,62 +2,66 @@ package com.example.comicaggregator.data.repository
 
 import com.example.comicaggregator.data.model.ComicBook
 import com.example.comicaggregator.data.model.ComicBookDetail
-import com.example.comicaggregator.data.parser.ComicParser
+import com.example.comicaggregator.parser.ParserRegistry
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
-import org.jsoup.Jsoup
 
 /**
- * Concrete implementation of [ComicRepository].
- * Feeds HTML content fetched over HTTP into the [ComicParser] within the IO thread pool context.
+ * Registry-backed implementation of [ComicRepository].
  *
- * @param parser The parsing contract implementation (e.g. [GetComicsParserImpl]).
- * @param ioDispatcher The thread pool dispatcher where the networking/scraping takes place (defaults to [Dispatchers.IO]).
+ * Instead of depending on a single [ComicParser], this repository queries
+ * **all active parsers** from the [ParserRegistry] and aggregates results.
+ *
+ * For detail pages, it routes the request to the first parser whose
+ * [baseUrl] matches the detail URL prefix, falling back to the first
+ * active parser if none matches.
+ *
+ * @param parserRegistry The global parser registry holding all active parsers.
+ * @param ioDispatcher The thread pool dispatcher for I/O work (defaults to [Dispatchers.IO]).
  */
 class ComicRepositoryImpl(
-    private val parser: ComicParser,
+    private val parserRegistry: ParserRegistry,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ComicRepository {
 
     override suspend fun getLatestComics(page: Int, searchQuery: String?): Result<List<ComicBook>> = withContext(ioDispatcher) {
         runCatching {
-            val url = if (searchQuery.isNullOrBlank()) {
-                if (page <= 1) "https://getcomics.org/" else "https://getcomics.org/page/$page/"
-            } else {
-                val encodedQuery = java.net.URLEncoder.encode(searchQuery, "UTF-8")
-                if (page <= 1) "https://getcomics.org/?s=$encodedQuery" else "https://getcomics.org/page/$page/?s=$encodedQuery"
+            val activeParsers = parserRegistry.getActiveParsers()
+
+            if (activeParsers.isEmpty()) {
+                return@runCatching emptyList<ComicBook>()
             }
-            // Fetch HTML over the wire with custom User-Agent and connection settings
-            val response = try {
-                Jsoup.connect(url)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36")
-                    .timeout(15000) // robust 15 seconds timeout
-                    .followRedirects(true)
-                    .execute()
-            } catch (e: org.jsoup.HttpStatusException) {
-                if (e.statusCode == 404) {
-                    return@runCatching emptyList<ComicBook>()
+
+            // Fan-out to all active parsers in parallel and merge results
+            val deferredResults = activeParsers.map { parser ->
+                async {
+                    try {
+                        parser.fetchComics(page, searchQuery)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        emptyList()
+                    }
                 }
-                throw e
             }
-            
-            val html = response.body()
-            parser.parseLatestComics(html)
+
+            deferredResults.awaitAll().flatten()
         }
     }
 
     override suspend fun getComicDetail(detailUrl: String): Result<ComicBookDetail> = withContext(ioDispatcher) {
         runCatching {
-            // Fetch raw HTML of the specific detail page on the network IO context
-            val response = Jsoup.connect(detailUrl)
-                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36")
-                .timeout(15000)
-                .followRedirects(true)
-                .execute()
+            val activeParsers = parserRegistry.getActiveParsers()
 
-            val html = response.body()
-            parser.parseComicDetail(html)
+            // Try to find the parser whose baseUrl matches the detail URL
+            val matchingParser = activeParsers.firstOrNull { parser ->
+                detailUrl.startsWith(parser.baseUrl)
+            } ?: activeParsers.firstOrNull()
+            ?: throw IllegalStateException("No active parsers available. Enable at least one parser in Settings.")
+
+            matchingParser.fetchComicDetail(detailUrl)
         }
     }
 }
