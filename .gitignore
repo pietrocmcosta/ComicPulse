@@ -1,0 +1,40 @@
+# Built variants and temporary compilation files
+*.apk
+*.aar
+*.ap_
+*.der
+*.pem
+*.pub
+*.key
+*.jks
+*.keystore
+*.class
+bin/
+gen/
+out/
+build/
+app/build/
+
+# Gradle files and caches
+.gradle/
+build/
+local.properties
+.navigation/
+
+# Android Studio and IntelliJ IDEA project files
+.idea/
+*.iml
+*.ipr
+*.iws
+.navigation/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Log files and crash reports
+*.log
+log/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
