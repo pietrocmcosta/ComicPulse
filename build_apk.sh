@@ -21,14 +21,30 @@ if [ -z "$VERSION_NAME" ]; then
 fi
 echo "Resolved App Version: $VERSION_NAME"
 
-# 2. Compile debug APK
+# 2. Compile release APK
 cd "$SCRIPT_DIR"
 chmod +x ./gradlew
-./gradlew assembleDebug "$@"
+
+# Ensure release keystore exists
+mkdir -p "$SCRIPT_DIR/keystore"
+if [ ! -f "$SCRIPT_DIR/keystore/comicpulse-release.jks" ]; then
+    echo "Release keystore not found; generating default release key..."
+    "$JAVA_HOME/bin/keytool" -genkeypair -v \
+      -keystore "$SCRIPT_DIR/keystore/comicpulse-release.jks" \
+      -alias comicpulse \
+      -keyalg RSA \
+      -keysize 2048 \
+      -validity 10000 \
+      -storepass comicpulse \
+      -keypass comicpulse \
+      -dname "CN=ComicPulse, OU=Mobile, O=ComicPulse, L=Sao Paulo, ST=SP, C=BR"
+fi
+
+./gradlew assembleRelease "$@"
 
 # 3. Ensure output directory exists and copy APK with version name
 mkdir -p "$OUTPUT_DIR"
-SRC_APK="$SCRIPT_DIR/app/build/outputs/apk/debug/app-debug.apk"
+SRC_APK="$SCRIPT_DIR/app/build/outputs/apk/release/app-release.apk"
 DEST_APK="$OUTPUT_DIR/comicpulse_${VERSION_NAME}.apk"
 DEST_APK_ALT="$OUTPUT_DIR/comic_pulse_${VERSION_NAME}.apk"
 

@@ -27,15 +27,30 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon
+      - name: Prepare Signing Keystore
+        run: |
+          mkdir -p keystore
+          if [ ! -f keystore/comicpulse-release.jks ]; then
+            keytool -genkeypair -v \
+              -keystore keystore/comicpulse-release.jks \
+              -alias comicpulse \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass comicpulse \
+              -keypass comicpulse \
+              -dname "CN=ComicPulse, OU=Mobile, O=ComicPulse, L=Sao Paulo, ST=SP, C=BR"
+          fi
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --no-daemon
 
       - name: Prepare Release APK
         id: prep
         run: |
           VERSION=$(grep 'versionName =' app/build.gradle.kts | sed -E 's/.*"([^"]+)".*/\1/' | head -n 1)
           APK_NAME="comicpulse_${VERSION}.apk"
-          cp app/build/outputs/apk/debug/app-debug.apk "$APK_NAME"
+          cp app/build/outputs/apk/release/app-release.apk "$APK_NAME"
           echo "apk_name=$APK_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
