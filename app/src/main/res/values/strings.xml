@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ComicPulse</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_discover">Discover</string>
+    <string name="nav_library">Library</string>
+    <string name="nav_downloads">Downloads</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- MainActivity / General -->
+    <string name="toast_no_app_for_link">No application found to handle this link.</string>
+    <string name="toast_download_started">Download started: %1$s</string>
+    <string name="toast_download_error">Error starting download: %1$s</string>
+    <string name="notification_downloading_comic">Downloading high-resolution comic…</string>
+    <string name="toast_unpacked_bundle">Unpacked comic bundle successfully!</string>
+    <string name="toast_comic_added_library">Comic added to library!</string>
+    <string name="toast_failed_create_file">Failed to create target file in Library.</string>
+    <string name="toast_import_failed">Import failed: %1$s</string>
+    <string name="default_imported_description">Locally imported comic book file.</string>
+
+    <!-- Discover / ComicListScreen -->
+    <string name="search_placeholder">Search comics…</string>
+    <string name="cd_clear_search">Clear Search</string>
+    <string name="cd_execute_search">Search</string>
+    <string name="cover_unreachable">Cover Unreachable</string>
+    <string name="pagination_error_title">Failed to load more page items.</string>
+    <string name="pagination_error_subtitle">Tap here to retry connection.</string>
+    <string name="pagination_end_feed">You\'ve caught up with the latest releases!</string>
+    <string name="pagination_end_search">No more results found.</string>
+    <string name="connection_disrupted">Connection Disrupted</string>
+    <string name="btn_retry_loading">Retry Loading</string>
+
+    <!-- ComicDetailScreen -->
+    <string name="cd_back">Navigate Back</string>
+    <string name="detail_plot_summary">STORY PLOT SUMMARY</string>
+    <string name="detail_available_mirrors">AVAILABLE DOWNLOAD MIRRORS</string>
+    <string name="detail_no_mirrors">No active download servers found. Please check online.</string>
+    <string name="detail_select_folder_warning">Please select a Library Folder to save downloads to.</string>
+    <string name="detail_download_now">DOWNLOAD NOW</string>
+    <string name="detail_external_mirrors">EXTERNAL MIRRORS</string>
+    <string name="detail_open_on_mirror">Open on %1$s</string>
+
+    <!-- LibraryScreen -->
+    <string name="library_title_prefix">OFFLINE</string>
+    <string name="library_title_suffix"> LIBRARY</string>
+    <string name="library_selected_count">%1$d Selected</string>
+    <string name="cd_clear_selection">Cancel</string>
+    <string name="cd_delete_selected">Delete</string>
+    <string name="cd_layout_view">Change Layout</string>
+    <string name="library_view_grid">Grid View</string>
+    <string name="library_view_list">List View</string>
+    <string name="library_view_detailed">Detailed View</string>
+    <string name="cd_rescan_library">Refresh</string>
+    <string name="cd_change_folder">Change Folder</string>
+    <string name="library_no_folder_title">No Library Folder Selected</string>
+    <string name="library_no_folder_desc">Select a folder on your device containing .cbz or .cbr files.</string>
+    <string name="btn_choose_folder">CHOOSE FOLDER</string>
+    <string name="library_empty_folder">No supported comics found in this folder.\n\nMake sure your downloaded files end in .cbz or .cbr</string>
+    <string name="cd_match_metadata">Match Metadata</string>
+    <string name="library_default_comic_desc">Locally imported comic book file. Tap read to open.</string>
+    <string name="btn_read">READ</string>
+
+    <!-- MatchMetadataDialog -->
+    <string name="match_title">Match Metadata</string>
+    <string name="match_subtitle">Link online details to file: \"%1$s\"</string>
+    <string name="match_search_label">Search Terms…</string>
+    <string name="match_search_prompt">Search getcomics.org catalog to fetch title and covers.</string>
+    <string name="match_no_results">No matched catalog items found.</string>
+    <string name="btn_cancel">CANCEL</string>
+    <string name="match_select_cover_title">Select Cover Art</string>
+    <string name="match_select_cover_subtitle">Choose the GetComics cover or a page from the comic book.</string>
+    <string name="match_online_cover_option">GetComics Cover Option</string>
+    <string name="match_local_page_options">Local Page Preview Options</string>
+    <string name="match_unable_extract_pages">No pages extracted. Standard covers used.</string>
+    <string name="toast_matching_metadata">Matching cover and metadata…</string>
+    <string name="btn_back">BACK</string>
+    <string name="btn_apply_cover">APPLY COVER</string>
+
+    <!-- DownloadsScreen -->
+    <string name="downloads_title_prefix">ACTIVE</string>
+    <string name="downloads_title_suffix"> DOWNLOADS</string>
+    <string name="downloads_total_progress">Total Progress</string>
+    <string name="downloads_percent_complete">%1$d%% Complete</string>
+    <string name="downloads_empty">No active or recent downloads.</string>
+    <string name="downloads_status_failed">Download Failed</string>
+    <string name="downloads_status_completed">Completed &amp; Added to Library</string>
+
+    <!-- ComicReaderScreen -->
+    <string name="reader_extracting">Extracting archive…</string>
+    <string name="cd_go_back">Go Back</string>
+    <string name="reader_fit_mode_label">FIT MODE:</string>
+    <string name="reader_fit_screen">FIT SCREEN</string>
+    <string name="reader_fit_width">FIT WIDTH</string>
+    <string name="reader_fit_height">FIT HEIGHT</string>
+    <string name="reader_page_indicator">%1$d / %2$d</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_language">LANGUAGE</string>
+    <string name="settings_language_title">App Language</string>
+    <string name="settings_language_desc">Choose your preferred display language</string>
+    <string name="settings_lang_system">System Default</string>
+    <string name="settings_lang_en">English</string>
+    <string name="settings_lang_pt">Português</string>
+    <string name="settings_section_sources">COMIC SOURCES</string>
+    <string name="settings_sources_desc">Enable or disable comic discovery sources. The Discover tab will aggregate results from all active sources.</string>
+    <string name="settings_plugin_builtin">BUILT-IN</string>
+    <string name="settings_section_about">ABOUT</string>
+    <string name="settings_version_format">Version %1$s</string>
+    <string name="settings_about_desc">A premium, high-performance offline comic reader and downloader with plug-and-play parser support.</string>
+</resources>

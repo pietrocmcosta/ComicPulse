@@ -8,6 +8,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
+import com.example.comicaggregator.R
 import com.example.comicaggregator.data.local.DownloadTracker
 import com.example.comicaggregator.data.local.LibraryDatabaseHelper
 import com.example.comicaggregator.data.local.StoragePreferences
@@ -74,7 +75,7 @@ class DownloadReceiver : BroadcastReceiver() {
                                         unpackZipToLibrary(appContext, contentUri, libraryFolder)
                                         
                                         launch(Dispatchers.Main) {
-                                            Toast.makeText(appContext, "Unpacked comic bundle successfully!", Toast.LENGTH_LONG).show()
+                                            Toast.makeText(appContext, appContext.getString(R.string.toast_unpacked_bundle), Toast.LENGTH_LONG).show()
                                         }
                                     } else {
                                         val extension = when {
@@ -129,18 +130,18 @@ class DownloadReceiver : BroadcastReceiver() {
                                                     fileName = fileName,
                                                     title = fileName.substringBeforeLast("."),
                                                     coverUrl = "",
-                                                    description = "Locally imported comic book file.",
+                                                    description = appContext.getString(R.string.default_imported_description),
                                                     localCover = localCoverPath,
                                                     detailUrl = ""
                                                 )
                                             }
                                             
                                             launch(Dispatchers.Main) {
-                                                Toast.makeText(appContext, "Comic added to library!", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(appContext, appContext.getString(R.string.toast_comic_added_library), Toast.LENGTH_LONG).show()
                                             }
                                         } else {
                                             launch(Dispatchers.Main) {
-                                                Toast.makeText(appContext, "Failed to create target file in Library.", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(appContext, appContext.getString(R.string.toast_failed_create_file), Toast.LENGTH_LONG).show()
                                             }
                                         }
                                     }
@@ -166,7 +167,7 @@ class DownloadReceiver : BroadcastReceiver() {
                     ex.printStackTrace()
                 }
                 launch(Dispatchers.Main) {
-                    Toast.makeText(appContext, "Import failed: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(appContext, appContext.getString(R.string.toast_import_failed, e.localizedMessage ?: ""), Toast.LENGTH_LONG).show()
                 }
             } finally {
                 pendingResult.finish()

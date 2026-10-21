@@ -36,12 +36,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
+import com.example.comicaggregator.R
 import com.example.comicaggregator.data.local.LocalComic
 import com.example.comicaggregator.data.model.ComicBook
 import com.example.comicaggregator.ui.viewmodel.LibraryUiState
@@ -92,7 +94,7 @@ fun LibraryScreen(
                 title = {
                     if (isSelectionMode) {
                         Text(
-                            text = "${selectedComics.size} Selected",
+                            text = stringResource(R.string.library_selected_count, selectedComics.size),
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
                             color = NeonCyan
@@ -100,13 +102,13 @@ fun LibraryScreen(
                     } else {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = "OFFLINE",
+                                text = stringResource(R.string.library_title_prefix),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 24.sp,
                                 color = NeonCyan
                             )
                             Text(
-                                text = " LIBRARY",
+                                text = stringResource(R.string.library_title_suffix),
                                 fontWeight = FontWeight.Light,
                                 fontSize = 24.sp,
                                 color = TextWhite
@@ -117,7 +119,7 @@ fun LibraryScreen(
                 navigationIcon = {
                     if (isSelectionMode) {
                         IconButton(onClick = { selectedComics = emptySet() }) {
-                            Icon(Icons.Default.Close, contentDescription = "Cancel", tint = TextWhite)
+                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.cd_clear_selection), tint = TextWhite)
                         }
                     }
                 },
@@ -128,21 +130,21 @@ fun LibraryScreen(
                             IconButton(onClick = {
                                 showMatchDialogForComic = selectedComics.first()
                             }) {
-                                Icon(Icons.Default.Search, contentDescription = "Match Metadata", tint = NeonCyan)
+                                Icon(Icons.Default.Search, contentDescription = stringResource(R.string.cd_match_metadata), tint = NeonCyan)
                             }
                         }
                         IconButton(onClick = {
                             viewModel.deleteComics(selectedComics)
                             selectedComics = emptySet()
                         }) {
-                            Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.Red)
+                            Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.cd_delete_selected), tint = Color.Red)
                         }
                     } else {
                         if (uiState is LibraryUiState.Success) {
                             // Layout Switcher Dropdown
                             Box {
                                 IconButton(onClick = { showLayoutMenu = true }) {
-                                    Icon(Icons.Default.List, contentDescription = "Change Layout", tint = TextWhite)
+                                    Icon(Icons.Default.List, contentDescription = stringResource(R.string.cd_layout_view), tint = TextWhite)
                                 }
                                 DropdownMenu(
                                     expanded = showLayoutMenu,
@@ -150,21 +152,21 @@ fun LibraryScreen(
                                     modifier = Modifier.background(CardBackground)
                                 ) {
                                     DropdownMenuItem(
-                                        text = { Text("Grid View", color = if (viewType == "GRID") NeonCyan else TextWhite) },
+                                        text = { Text(stringResource(R.string.library_view_grid), color = if (viewType == "GRID") NeonCyan else TextWhite) },
                                         onClick = {
                                             viewModel.saveViewType("GRID")
                                             showLayoutMenu = false
                                         }
                                     )
                                     DropdownMenuItem(
-                                        text = { Text("List View", color = if (viewType == "LIST") NeonCyan else TextWhite) },
+                                        text = { Text(stringResource(R.string.library_view_list), color = if (viewType == "LIST") NeonCyan else TextWhite) },
                                         onClick = {
                                             viewModel.saveViewType("LIST")
                                             showLayoutMenu = false
                                         }
                                     )
                                     DropdownMenuItem(
-                                        text = { Text("Detailed View", color = if (viewType == "DETAIL") NeonCyan else TextWhite) },
+                                        text = { Text(stringResource(R.string.library_view_detailed), color = if (viewType == "DETAIL") NeonCyan else TextWhite) },
                                         onClick = {
                                             viewModel.saveViewType("DETAIL")
                                             showLayoutMenu = false
@@ -173,10 +175,10 @@ fun LibraryScreen(
                                 }
                             }
                             IconButton(onClick = { viewModel.loadLibrary() }) {
-                                Icon(Icons.Default.Refresh, contentDescription = "Refresh", tint = TextWhite)
+                                Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.cd_rescan_library), tint = TextWhite)
                             }
                             IconButton(onClick = { folderPickerLauncher.launch(null) }) {
-                                Icon(Icons.Default.Add, contentDescription = "Change Folder", tint = TextWhite)
+                                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.cd_change_folder), tint = TextWhite)
                             }
                         }
                     }
@@ -215,14 +217,14 @@ fun LibraryScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "No Library Folder Selected",
+                            text = stringResource(R.string.library_no_folder_title),
                             color = TextWhite,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Select a folder on your device containing .cbz or .cbr files.",
+                            text = stringResource(R.string.library_no_folder_desc),
                             color = TextMuted,
                             fontSize = 14.sp,
                             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
@@ -234,7 +236,7 @@ fun LibraryScreen(
                             colors = ButtonDefaults.buttonColors(containerColor = NeonCyan),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text("CHOOSE FOLDER", color = Color.Black, fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.btn_choose_folder), color = Color.Black, fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -242,7 +244,7 @@ fun LibraryScreen(
                     if (state.comics.isEmpty()) {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             Text(
-                                "No supported comics found in this folder.\n\nMake sure your downloaded files end in .cbz or .cbr",
+                                stringResource(R.string.library_empty_folder),
                                 color = TextMuted,
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                                 modifier = Modifier.padding(32.dp)
@@ -650,7 +652,7 @@ fun LocalComicDetailRow(
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 Text(
-                    text = comic.description ?: "Locally imported comic book file. Tap read to open.",
+                    text = comic.description ?: stringResource(R.string.library_default_comic_desc),
                     color = TextMuted,
                     fontSize = 12.sp,
                     maxLines = 3,
@@ -667,7 +669,7 @@ fun LocalComicDetailRow(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
                     modifier = Modifier.height(32.dp)
                 ) {
-                    Text("READ", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                    Text(stringResource(R.string.btn_read), color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 11.sp)
                 }
             }
         }
@@ -708,14 +710,14 @@ fun MatchMetadataDialog(
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "Match Metadata",
+                        text = stringResource(R.string.match_title),
                         color = NeonCyan,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Link online details to file: \"${comic.name}\"",
+                        text = stringResource(R.string.match_subtitle, comic.name),
                         color = TextMuted,
                         fontSize = 12.sp,
                         maxLines = 1,
@@ -731,7 +733,7 @@ fun MatchMetadataDialog(
                         TextField(
                             value = searchQuery,
                             onValueChange = { searchQuery = it },
-                            placeholder = { Text("Search Terms...", color = TextMuted) },
+                            placeholder = { Text(stringResource(R.string.match_search_label), color = TextMuted) },
                             singleLine = true,
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = Color(0xFF0F0F14),
@@ -770,7 +772,7 @@ fun MatchMetadataDialog(
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier.height(52.dp)
                         ) {
-                            Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Black)
+                            Icon(Icons.Default.Search, contentDescription = stringResource(R.string.cd_execute_search), tint = Color.Black)
                         }
                     }
                     
@@ -795,14 +797,14 @@ fun MatchMetadataDialog(
                             )
                         } else if (results == null) {
                             Text(
-                                text = "Search getcomics.org catalog to fetch title and covers.",
+                                text = stringResource(R.string.match_search_prompt),
                                 color = TextMuted,
                                 fontSize = 13.sp,
                                 modifier = Modifier.align(Alignment.Center)
                             )
                         } else if (results!!.isEmpty()) {
                             Text(
-                                text = "No matched catalog items found.",
+                                text = stringResource(R.string.match_no_results),
                                 color = TextMuted,
                                 fontSize = 13.sp,
                                 modifier = Modifier.align(Alignment.Center)
@@ -866,7 +868,7 @@ fun MatchMetadataDialog(
                         onClick = onDismiss,
                         modifier = Modifier.align(Alignment.End)
                     ) {
-                        Text("CANCEL", color = NeonCyan)
+                        Text(stringResource(R.string.btn_cancel), color = NeonCyan)
                     }
                 }
             } else {
@@ -889,14 +891,14 @@ fun MatchMetadataDialog(
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "Select Cover Art",
+                        text = stringResource(R.string.match_select_cover_title),
                         color = NeonCyan,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Choose the GetComics cover or a page from the comic book.",
+                        text = stringResource(R.string.match_select_cover_subtitle),
                         color = TextMuted,
                         fontSize = 12.sp,
                         maxLines = 1,
@@ -911,7 +913,7 @@ fun MatchMetadataDialog(
                             .fillMaxWidth()
                     ) {
                         Text(
-                            text = "GetComics Cover Option",
+                            text = stringResource(R.string.match_online_cover_option),
                             color = TextWhite,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
@@ -956,7 +958,7 @@ fun MatchMetadataDialog(
                         Spacer(modifier = Modifier.height(20.dp))
                         
                         Text(
-                            text = "Local Page Preview Options",
+                            text = stringResource(R.string.match_local_page_options),
                             color = TextWhite,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
@@ -980,7 +982,7 @@ fun MatchMetadataDialog(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "No pages extracted. Standard covers used.",
+                                    text = stringResource(R.string.match_unable_extract_pages),
                                     color = TextMuted,
                                     fontSize = 12.sp
                                 )
@@ -1038,12 +1040,12 @@ fun MatchMetadataDialog(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         TextButton(onClick = { selectedMatchedBook = null }) {
-                            Text("BACK", color = NeonCyan)
+                            Text(stringResource(R.string.btn_back), color = NeonCyan)
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                         Button(
                             onClick = {
-                                Toast.makeText(context, "Matching cover and metadata...", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.toast_matching_metadata), Toast.LENGTH_SHORT).show()
                                 viewModel.matchComicMetadataWithCustomCover(
                                     comic = comic,
                                     matchedBook = book,
@@ -1055,7 +1057,7 @@ fun MatchMetadataDialog(
                             colors = ButtonDefaults.buttonColors(containerColor = NeonCyan),
                             shape = RoundedCornerShape(8.dp)
                         ) {
-                            Text("APPLY COVER", color = Color.Black, fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.btn_apply_cover), color = Color.Black, fontWeight = FontWeight.Bold)
                         }
                     }
                 }

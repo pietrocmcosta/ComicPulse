@@ -16,10 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.comicaggregator.R
 import com.example.comicaggregator.parser.ParserMetadata
 import com.example.comicaggregator.parser.ParserRegistry
 import kotlinx.coroutines.launch
@@ -37,6 +39,8 @@ private val SwitchOff = Color(0xFF2A2A3C)
 @Composable
 fun SettingsScreen(
     parserRegistry: ParserRegistry,
+    currentLanguage: String = "system",
+    onLanguageSelected: (String) -> Unit = {},
     onBackClick: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -49,7 +53,7 @@ fun SettingsScreen(
             TopAppBar(
                 title = {
                     Text(
-                        "Settings",
+                        stringResource(R.string.settings_title),
                         color = TextWhite,
                         fontWeight = FontWeight.Bold,
                         fontSize = 22.sp
@@ -57,7 +61,7 @@ fun SettingsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = NeonCyan)
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.cd_back), tint = NeonCyan)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
@@ -73,10 +77,75 @@ fun SettingsScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(vertical = 16.dp)
         ) {
+            // ─── Section: Language ───
+            item {
+                Text(
+                    text = stringResource(R.string.settings_section_language),
+                    color = NeonCyan,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.5.sp,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = CardBackground),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = stringResource(R.string.settings_language_title),
+                            color = TextWhite,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = stringResource(R.string.settings_language_desc),
+                            color = TextMuted,
+                            fontSize = 12.sp
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        val langOptions = listOf(
+                            "system" to stringResource(R.string.settings_lang_system),
+                            "en" to stringResource(R.string.settings_lang_en),
+                            "pt" to stringResource(R.string.settings_lang_pt)
+                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            langOptions.forEach { (code, label) ->
+                                val isSelected = currentLanguage == code
+                                Button(
+                                    onClick = { onLanguageSelected(code) },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = if (isSelected) NeonCyan else SwitchOff,
+                                        contentColor = if (isSelected) Color.Black else TextWhite
+                                    ),
+                                    shape = RoundedCornerShape(8.dp),
+                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp),
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text(
+                                        text = label,
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
             // ─── Section: Scrapers / Parsers ───
             item {
                 Text(
-                    text = "COMIC SOURCES",
+                    text = stringResource(R.string.settings_section_sources),
                     color = NeonCyan,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
@@ -84,7 +153,7 @@ fun SettingsScreen(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 Text(
-                    text = "Enable or disable comic discovery sources. The Discover tab will aggregate results from all active sources.",
+                    text = stringResource(R.string.settings_sources_desc),
                     color = TextMuted,
                     fontSize = 12.sp,
                     lineHeight = 16.sp,
@@ -109,7 +178,7 @@ fun SettingsScreen(
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "ABOUT",
+                    text = stringResource(R.string.settings_section_about),
                     color = NeonCyan,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
@@ -125,12 +194,12 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text("ComicPulse", color = TextWhite, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text(stringResource(R.string.app_name), color = TextWhite, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text("Version 1.0.0", color = TextMuted, fontSize = 13.sp)
+                        Text(stringResource(R.string.settings_version_format, "1.1.0"), color = TextMuted, fontSize = 13.sp)
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            "A premium, high-performance offline comic reader and downloader with plug-and-play parser support.",
+                            stringResource(R.string.settings_about_desc),
                             color = TextMuted,
                             fontSize = 12.sp,
                             lineHeight = 16.sp
@@ -218,7 +287,7 @@ private fun ParserCard(
                                     .padding(horizontal = 6.dp, vertical = 2.dp)
                             ) {
                                 Text(
-                                    text = "BUILT-IN",
+                                    text = stringResource(R.string.settings_plugin_builtin),
                                     color = NeonCyan,
                                     fontSize = 9.sp,
                                     fontWeight = FontWeight.Bold

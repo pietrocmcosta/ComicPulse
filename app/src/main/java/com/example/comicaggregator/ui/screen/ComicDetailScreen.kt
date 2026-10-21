@@ -22,12 +22,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import kotlinx.coroutines.launch
+import com.example.comicaggregator.R
 import com.example.comicaggregator.data.model.ComicBookDetail
 import com.example.comicaggregator.ui.state.ComicDetailUiState
 import com.example.comicaggregator.ui.viewmodel.ComicDetailViewModel
@@ -98,7 +100,7 @@ fun ComicDetailScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Navigate Back",
+                    contentDescription = stringResource(R.string.cd_back),
                     tint = TextWhite,
                     modifier = Modifier.size(24.dp)
                 )
@@ -202,7 +204,7 @@ fun DetailContentScreen(
 
                 // plot header
                 Text(
-                    text = "STORY PLOT SUMMARY",
+                    text = stringResource(R.string.detail_plot_summary),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp,
                     letterSpacing = 1.5.sp,
@@ -225,7 +227,7 @@ fun DetailContentScreen(
 
                 // Download options
                 Text(
-                    text = "AVAILABLE DOWNLOAD MIRRORS",
+                    text = stringResource(R.string.detail_available_mirrors),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp,
                     letterSpacing = 1.5.sp,
@@ -243,7 +245,7 @@ fun DetailContentScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No active download servers found. Please check online.",
+                            text = stringResource(R.string.detail_no_mirrors),
                             color = TextMuted,
                             fontSize = 14.sp
                         )
@@ -272,7 +274,7 @@ fun DetailContentScreen(
                         Button(
                             onClick = { 
                                 if (libraryUri.isNullOrEmpty()) {
-                                    android.widget.Toast.makeText(context, "Please select a Library Folder to save downloads to.", android.widget.Toast.LENGTH_LONG).show()
+                                    android.widget.Toast.makeText(context, context.getString(R.string.detail_select_folder_warning), android.widget.Toast.LENGTH_LONG).show()
                                     folderPickerLauncher.launch(null)
                                 } else {
                                     DownloadHelper.startDirectDownload(
@@ -293,12 +295,12 @@ fun DetailContentScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,
-                                contentDescription = "Download Now",
+                                contentDescription = stringResource(R.string.detail_download_now),
                                 tint = DarkBackground
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "DOWNLOAD NOW",
+                                text = stringResource(R.string.detail_download_now),
                                 color = DarkBackground,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
@@ -309,7 +311,7 @@ fun DetailContentScreen(
                         if (externalLinks.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(24.dp))
                             Text(
-                                text = "EXTERNAL MIRRORS",
+                                text = stringResource(R.string.detail_external_mirrors),
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 12.sp,
                                 letterSpacing = 1.5.sp,
@@ -378,7 +380,7 @@ fun DownloadHostButton(
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "Open on $hostName",
+            text = stringResource(R.string.detail_open_on_mirror, hostName),
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp,
             color = textColor

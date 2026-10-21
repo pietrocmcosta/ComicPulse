@@ -4,6 +4,7 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
+import com.example.comicaggregator.R
 import com.example.comicaggregator.data.local.LibraryDatabaseHelper
 
 /**
@@ -29,7 +30,7 @@ object DownloadHelper {
 
             val request = DownloadManager.Request(uri).apply {
                 setTitle(title)
-                setDescription("Downloading high-resolution comic...")
+                setDescription(context.getString(R.string.notification_downloading_comic))
                 setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 setAllowedOverMetered(true)
                 setAllowedOverRoaming(true)
@@ -41,9 +42,9 @@ object DownloadHelper {
             val dbHelper = LibraryDatabaseHelper(context)
             dbHelper.insertDownloadMetadata(downloadId, title, coverImageUrl, description, detailUrl)
             
-            Toast.makeText(context, "Download started: $title", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.toast_download_started, title), Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
-            Toast.makeText(context, "Error starting download: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.getString(R.string.toast_download_error, e.localizedMessage ?: ""), Toast.LENGTH_LONG).show()
         }
     }
 }

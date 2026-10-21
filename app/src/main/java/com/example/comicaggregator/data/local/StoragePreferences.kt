@@ -20,6 +20,7 @@ class StoragePreferences(private val context: Context) {
 
     private val LIBRARY_URI_KEY = stringPreferencesKey("library_folder_uri")
     private val VIEW_TYPE_KEY = stringPreferencesKey("library_view_type")
+    private val LANGUAGE_KEY = stringPreferencesKey("app_language")
 
     /**
      * A Flow that emits the currently saved Library Folder URI string, or null if none is selected.
@@ -33,6 +34,13 @@ class StoragePreferences(private val context: Context) {
      */
     val viewTypeFlow: Flow<String> = context.dataStore.data.map { preferences ->
         preferences[VIEW_TYPE_KEY] ?: "GRID"
+    }
+
+    /**
+     * A Flow that emits the selected app language ("system", "en", or "pt").
+     */
+    val languageFlow: Flow<String> = context.dataStore.data.map { preferences ->
+        preferences[LANGUAGE_KEY] ?: "system"
     }
 
     /**
@@ -50,6 +58,15 @@ class StoragePreferences(private val context: Context) {
     suspend fun saveViewType(viewType: String) {
         context.dataStore.edit { preferences ->
             preferences[VIEW_TYPE_KEY] = viewType
+        }
+    }
+
+    /**
+     * Saves the selected app language to persistent storage.
+     */
+    suspend fun saveLanguage(language: String) {
+        context.dataStore.edit { preferences ->
+            preferences[LANGUAGE_KEY] = language
         }
     }
 

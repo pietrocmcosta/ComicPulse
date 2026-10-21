@@ -18,10 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.comicaggregator.R
 import com.example.comicaggregator.data.local.DownloadTask
 import com.example.comicaggregator.ui.viewmodel.DownloadsViewModel
 
@@ -46,13 +48,13 @@ fun DownloadsScreen(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "ACTIVE",
+                            text = stringResource(R.string.downloads_title_prefix),
                             fontWeight = FontWeight.Bold,
                             fontSize = 24.sp,
                             color = NeonCyan
                         )
                         Text(
-                            text = " DOWNLOADS",
+                            text = stringResource(R.string.downloads_title_suffix),
                             fontWeight = FontWeight.Light,
                             fontSize = 24.sp,
                             color = TextWhite
@@ -98,8 +100,8 @@ fun DownloadsScreen(
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Column {
-                            Text("Total Progress", color = TextWhite, fontWeight = FontWeight.Bold)
-                            Text("${(aggregateProgress * 100).toInt()}% Complete", color = TextMuted)
+                            Text(stringResource(R.string.downloads_total_progress), color = TextWhite, fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.downloads_percent_complete, (aggregateProgress * 100).toInt()), color = TextMuted)
                         }
                     }
                 }
@@ -107,7 +109,7 @@ fun DownloadsScreen(
 
             if (downloads.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No active or recent downloads.", color = TextMuted)
+                    Text(stringResource(R.string.downloads_empty), color = TextMuted)
                 }
             } else {
                 LazyColumn(
@@ -172,10 +174,10 @@ fun DownloadItem(task: DownloadTask) {
                 )
             } else if (task.status == DownloadManager.STATUS_FAILED) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("Download Failed", color = Color(0xFFEF4444), fontSize = 12.sp)
+                Text(stringResource(R.string.downloads_status_failed), color = Color(0xFFEF4444), fontSize = 12.sp)
             } else if (task.status == DownloadManager.STATUS_SUCCESSFUL) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("Completed & Added to Library", color = Color(0xFF10B981), fontSize = 12.sp)
+                Text(stringResource(R.string.downloads_status_completed), color = Color(0xFF10B981), fontSize = 12.sp)
             }
         }
     }

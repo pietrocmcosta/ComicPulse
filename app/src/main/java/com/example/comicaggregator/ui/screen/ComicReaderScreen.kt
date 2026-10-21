@@ -20,10 +20,12 @@ import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.comicaggregator.R
 import com.example.comicaggregator.ui.viewmodel.ComicReaderViewModel
 import com.example.comicaggregator.ui.viewmodel.ReaderUiState
 import kotlin.math.abs
@@ -56,7 +58,7 @@ fun ComicReaderScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         CircularProgressIndicator(color = NeonCyan)
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text("Extracting archive...", color = Color.White)
+                        Text(stringResource(R.string.reader_extracting), color = Color.White)
                     }
                 }
             }
@@ -86,7 +88,7 @@ fun ComicReaderScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(onClick = onBackClick) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                            Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.cd_back), tint = Color.White)
                         }
                         Text(
                             text = title,
@@ -113,16 +115,16 @@ fun ComicReaderScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "FIT MODE:",
+                                text = stringResource(R.string.reader_fit_mode_label),
                                 color = TextMuted,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold
                             )
                             
                             val modes = listOf(
-                                "FIT SCREEN" to ContentScale.Fit,
-                                "FIT WIDTH" to ContentScale.FillWidth,
-                                "FIT HEIGHT" to ContentScale.FillHeight
+                                stringResource(R.string.reader_fit_screen) to ContentScale.Fit,
+                                stringResource(R.string.reader_fit_width) to ContentScale.FillWidth,
+                                stringResource(R.string.reader_fit_height) to ContentScale.FillHeight
                             )
                             
                             modes.forEach { (label, scale) ->
@@ -145,7 +147,7 @@ fun ComicReaderScreen(
                         Spacer(modifier = Modifier.height(12.dp))
                         
                         Text(
-                            text = "${pagerState.currentPage + 1} / ${state.pages.size}",
+                            text = stringResource(R.string.reader_page_indicator, pagerState.currentPage + 1, state.pages.size),
                             color = Color.White,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold
@@ -158,7 +160,7 @@ fun ComicReaderScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(state.message, color = Color.Red, modifier = Modifier.padding(32.dp))
                         Button(onClick = onBackClick) {
-                            Text("Go Back")
+                            Text(stringResource(R.string.cd_go_back))
                         }
                     }
                 }

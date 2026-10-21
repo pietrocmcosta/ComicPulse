@@ -27,11 +27,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import com.example.comicaggregator.R
 import com.example.comicaggregator.data.model.ComicBook
 import com.example.comicaggregator.ui.state.ComicUiState
 import com.example.comicaggregator.ui.viewmodel.ComicViewModel
@@ -94,7 +96,7 @@ fun ComicListScreen(
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
-                placeholder = { Text("Search comics...", color = TextMuted) },
+                placeholder = { Text(stringResource(R.string.search_placeholder), color = TextMuted) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -121,10 +123,10 @@ fun ComicListScreen(
                             searchQuery = ""
                             viewModel.fetchComics(null) 
                         }) {
-                            Icon(Icons.Default.Clear, "Clear Search", tint = TextMuted)
+                            Icon(Icons.Default.Clear, stringResource(R.string.cd_clear_search), tint = TextMuted)
                         }
                     } else {
-                        Icon(Icons.Default.Search, "Search", tint = TextMuted)
+                        Icon(Icons.Default.Search, stringResource(R.string.cd_execute_search), tint = TextMuted)
                     }
                 }
             )
@@ -242,13 +244,13 @@ fun ComicGrid(
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
                             Text(
-                                text = "Failed to load more page items.",
+                                text = stringResource(R.string.pagination_error_title),
                                 fontWeight = FontWeight.Bold,
                                 color = TextWhite,
                                 fontSize = 13.sp
                             )
                             Text(
-                                text = "Tap here to retry connection.",
+                                text = stringResource(R.string.pagination_error_subtitle),
                                 color = TextMuted,
                                 fontSize = 11.sp
                             )
@@ -265,7 +267,7 @@ fun ComicGrid(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = if (searchQuery.isNullOrBlank()) "You've caught up with the latest releases!" else "No more results found.",
+                        text = if (searchQuery.isNullOrBlank()) stringResource(R.string.pagination_end_feed) else stringResource(R.string.pagination_end_search),
                         color = TextMuted,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold
@@ -334,7 +336,7 @@ fun ComicCard(
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = "Cover Unreachable",
+                                    text = stringResource(R.string.cover_unreachable),
                                     color = TextMuted,
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold
@@ -534,7 +536,7 @@ fun ErrorStateScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Connection Disrupted",
+                text = stringResource(R.string.connection_disrupted),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 color = TextWhite
@@ -558,13 +560,13 @@ fun ErrorStateScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Refresh,
-                    contentDescription = "Retry Icon",
+                    contentDescription = stringResource(R.string.btn_retry_loading),
                     tint = Color.Black,
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Retry Loading",
+                    text = stringResource(R.string.btn_retry_loading),
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
                     fontSize = 15.sp

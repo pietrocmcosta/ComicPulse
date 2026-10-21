@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ComicPulse</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_discover">Descobrir</string>
+    <string name="nav_library">Biblioteca</string>
+    <string name="nav_downloads">Downloads</string>
+    <string name="nav_settings">Configurações</string>
+
+    <!-- MainActivity / General -->
+    <string name="toast_no_app_for_link">Nenhum aplicativo encontrado para abrir este link.</string>
+    <string name="toast_download_started">Download iniciado: %1$s</string>
+    <string name="toast_download_error">Erro ao iniciar o download: %1$s</string>
+    <string name="notification_downloading_comic">Baixando quadrinho em alta resolução…</string>
+    <string name="toast_unpacked_bundle">Pacote de quadrinhos descompactado com sucesso!</string>
+    <string name="toast_comic_added_library">Quadrinho adicionado à biblioteca!</string>
+    <string name="toast_failed_create_file">Falha ao criar o arquivo na Biblioteca.</string>
+    <string name="toast_import_failed">Falha na importação: %1$s</string>
+    <string name="default_imported_description">Arquivo de quadrinho importado localmente.</string>
+
+    <!-- Discover / ComicListScreen -->
+    <string name="search_placeholder">Buscar quadrinhos…</string>
+    <string name="cd_clear_search">Limpar Busca</string>
+    <string name="cd_execute_search">Buscar</string>
+    <string name="cover_unreachable">Capa Indisponível</string>
+    <string name="pagination_error_title">Falha ao carregar mais itens.</string>
+    <string name="pagination_error_subtitle">Toque aqui para tentar novamente.</string>
+    <string name="pagination_end_feed">Você já viu todos os lançamentos mais recentes!</string>
+    <string name="pagination_end_search">Nenhum outro resultado encontrado.</string>
+    <string name="connection_disrupted">Conexão Interrompida</string>
+    <string name="btn_retry_loading">Tentar Novamente</string>
+
+    <!-- ComicDetailScreen -->
+    <string name="cd_back">Voltar</string>
+    <string name="detail_plot_summary">RESUMO DA HISTÓRIA</string>
+    <string name="detail_available_mirrors">SERVIDORES DE DOWNLOAD DISPONÍVEIS</string>
+    <string name="detail_no_mirrors">Nenhum servidor de download ativo encontrado. Verifique online.</string>
+    <string name="detail_select_folder_warning">Selecione uma Pasta da Biblioteca para salvar os downloads.</string>
+    <string name="detail_download_now">BAIXAR AGORA</string>
+    <string name="detail_external_mirrors">SERVIDORES EXTERNOS</string>
+    <string name="detail_open_on_mirror">Abrir no %1$s</string>
+
+    <!-- LibraryScreen -->
+    <string name="library_title_prefix">BIBLIOTECA</string>
+    <string name="library_title_suffix"> OFFLINE</string>
+    <string name="library_selected_count">%1$d Selecionado(s)</string>
+    <string name="cd_clear_selection">Cancelar</string>
+    <string name="cd_delete_selected">Excluir</string>
+    <string name="cd_layout_view">Alterar Exibição</string>
+    <string name="library_view_grid">Visualização em Grade</string>
+    <string name="library_view_list">Visualização em Lista</string>
+    <string name="library_view_detailed">Visualização Detalhada</string>
+    <string name="cd_rescan_library">Atualizar</string>
+    <string name="cd_change_folder">Alterar Pasta</string>
+    <string name="library_no_folder_title">Nenhuma Pasta da Biblioteca Selecionada</string>
+    <string name="library_no_folder_desc">Selecione uma pasta no seu dispositivo contendo arquivos .cbz ou .cbr.</string>
+    <string name="btn_choose_folder">ESCOLHER PASTA</string>
+    <string name="library_empty_folder">Nenhum quadrinho compatível encontrado nesta pasta.\n\nCertifique-se de que seus arquivos baixados terminem em .cbz ou .cbr</string>
+    <string name="cd_match_metadata">Vincular Metadados</string>
+    <string name="library_default_comic_desc">Arquivo de quadrinho importado localmente. Toque em ler para abrir.</string>
+    <string name="btn_read">LER</string>
+
+    <!-- MatchMetadataDialog -->
+    <string name="match_title">Vincular Metadados</string>
+    <string name="match_subtitle">Vincular detalhes online ao arquivo: \"%1$s\"</string>
+    <string name="match_search_label">Termos de busca…</string>
+    <string name="match_search_prompt">Pesquise no catálogo getcomics.org para buscar título e capas.</string>
+    <string name="match_no_results">Nenhum item correspondente encontrado no catálogo.</string>
+    <string name="btn_cancel">CANCELAR</string>
+    <string name="match_select_cover_title">Selecionar Capa</string>
+    <string name="match_select_cover_subtitle">Escolha a capa do GetComics ou uma página do quadrinho.</string>
+    <string name="match_online_cover_option">Opção de Capa do GetComics</string>
+    <string name="match_local_page_options">Opções de Páginas Locais</string>
+    <string name="match_unable_extract_pages">Nenhuma página extraída. Capas padrão utilizadas.</string>
+    <string name="toast_matching_metadata">Vinculando capa e metadados…</string>
+    <string name="btn_back">VOLTAR</string>
+    <string name="btn_apply_cover">APLICAR CAPA</string>
+
+    <!-- DownloadsScreen -->
+    <string name="downloads_title_prefix">DOWNLOADS</string>
+    <string name="downloads_title_suffix"> ATIVOS</string>
+    <string name="downloads_total_progress">Progresso Total</string>
+    <string name="downloads_percent_complete">%1$d%% Concluído</string>
+    <string name="downloads_empty">Nenhum download ativo ou recente.</string>
+    <string name="downloads_status_failed">Falha no Download</string>
+    <string name="downloads_status_completed">Concluído e Adicionado à Biblioteca</string>
+
+    <!-- ComicReaderScreen -->
+    <string name="reader_extracting">Extraindo arquivo…</string>
+    <string name="cd_go_back">Voltar</string>
+    <string name="reader_fit_mode_label">AJUSTE:</string>
+    <string name="reader_fit_screen">TELA INTEIRA</string>
+    <string name="reader_fit_width">LARGURA</string>
+    <string name="reader_fit_height">ALTURA</string>
+    <string name="reader_page_indicator">%1$d / %2$d</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings_title">Configurações</string>
+    <string name="settings_section_language">IDIOMA</string>
+    <string name="settings_language_title">Idioma do Aplicativo</string>
+    <string name="settings_language_desc">Escolha o idioma de exibição preferido</string>
+    <string name="settings_lang_system">Padrão do Sistema</string>
+    <string name="settings_lang_en">English</string>
+    <string name="settings_lang_pt">Português</string>
+    <string name="settings_section_sources">FONTES DE QUADRINHOS</string>
+    <string name="settings_sources_desc">Ative ou desative fontes de descoberta de quadrinhos. A aba Descobrir reunirá resultados de todas as fontes ativas.</string>
+    <string name="settings_plugin_builtin">INTEGRADO</string>
+    <string name="settings_section_about">SOBRE</string>
+    <string name="settings_version_format">Versão %1$s</string>
+    <string name="settings_about_desc">Um leitor e gerenciador de downloads de quadrinhos offline de alto desempenho com suporte a plugins.</string>
+</resources>
