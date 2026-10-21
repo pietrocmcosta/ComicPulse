@@ -27,17 +27,30 @@ chmod +x ./gradlew
 
 # Ensure release keystore exists
 mkdir -p "$SCRIPT_DIR/keystore"
-if [ ! -f "$SCRIPT_DIR/keystore/comicpulse-release.jks" ]; then
-    echo "Release keystore not found; generating default release key..."
+KEYSTORE_FILE="$SCRIPT_DIR/keystore/comicpulse.keystore"
+if [ ! -f "$KEYSTORE_FILE" ]; then
+    echo "Release keystore not found; generating 4096-bit release key..."
     "$JAVA_HOME/bin/keytool" -genkeypair -v \
-      -keystore "$SCRIPT_DIR/keystore/comicpulse-release.jks" \
+      -keystore "$KEYSTORE_FILE" \
+      -storetype PKCS12 \
       -alias comicpulse \
       -keyalg RSA \
-      -keysize 2048 \
+      -keysize 4096 \
+      -sigalg SHA256withRSA \
       -validity 10000 \
-      -storepass comicpulse \
-      -keypass comicpulse \
-      -dname "CN=ComicPulse, OU=Mobile, O=ComicPulse, L=Sao Paulo, ST=SP, C=BR"
+      -storepass comicpulse_key_2026 \
+      -keypass comicpulse_key_2026 \
+      -dname "CN=ComicPulse Release, OU=ComicPulse Mobile, O=ComicPulse, L=Sao Paulo, ST=SP, C=BR"
+fi
+
+# Ensure keystore.properties exists
+if [ ! -f "$SCRIPT_DIR/keystore.properties" ]; then
+    cat << 'EOF' > "$SCRIPT_DIR/keystore.properties"
+storeFile=keystore/comicpulse.keystore
+storePassword=comicpulse_key_2026
+keyAlias=comicpulse
+keyPassword=comicpulse_key_2026
+EOF
 fi
 
 ./gradlew assembleRelease "$@"
@@ -56,6 +69,13 @@ if [ -f "$SRC_APK" ]; then
     echo "APK copied to: $DEST_APK"
     echo "APK copied to: $DEST_APK_ALT"
     echo "=================================================="
+    
+    # Verify signature
+    APKSIGNER="$ANDROID_HOME/build-tools/34.0.0/apksigner"
+    if [ -x "$APKSIGNER" ]; then
+        echo "Verifying APK Signature with apksigner:"
+        "$APKSIGNER" verify --verbose --print-certs "$DEST_APK" || true
+    fi
 else
     echo "Error: Compiled APK not found at $SRC_APK" >&2
     exit 1

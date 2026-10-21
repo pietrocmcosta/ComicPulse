@@ -8,6 +8,8 @@
 *.key
 *.jks
 *.keystore
+keystore.properties
+keystore/
 *.class
 bin/
 gen/

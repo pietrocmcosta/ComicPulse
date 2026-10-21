@@ -30,17 +30,25 @@ jobs:
       - name: Prepare Signing Keystore
         run: |
           mkdir -p keystore
-          if [ ! -f keystore/comicpulse-release.jks ]; then
+          if [ ! -f keystore/comicpulse.keystore ]; then
             keytool -genkeypair -v \
-              -keystore keystore/comicpulse-release.jks \
+              -keystore keystore/comicpulse.keystore \
+              -storetype PKCS12 \
               -alias comicpulse \
               -keyalg RSA \
-              -keysize 2048 \
+              -keysize 4096 \
+              -sigalg SHA256withRSA \
               -validity 10000 \
-              -storepass comicpulse \
-              -keypass comicpulse \
-              -dname "CN=ComicPulse, OU=Mobile, O=ComicPulse, L=Sao Paulo, ST=SP, C=BR"
+              -storepass comicpulse_key_2026 \
+              -keypass comicpulse_key_2026 \
+              -dname "CN=ComicPulse Release, OU=ComicPulse Mobile, O=ComicPulse, L=Sao Paulo, ST=SP, C=BR"
           fi
+          cat << 'EOF' > keystore.properties
+          storeFile=keystore/comicpulse.keystore
+          storePassword=comicpulse_key_2026
+          keyAlias=comicpulse
+          keyPassword=comicpulse_key_2026
+          EOF
 
       - name: Build Release APK
         run: ./gradlew assembleRelease --no-daemon

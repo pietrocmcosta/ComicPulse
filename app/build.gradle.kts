@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -21,16 +24,33 @@ android {
 
     signingConfigs {
         create("release") {
-            val keystorePath = project.findProperty("RELEASE_KEYSTORE_PATH")?.toString()
-                ?: System.getenv("RELEASE_KEYSTORE_PATH")
-                ?: "../keystore/comicpulse-release.jks"
-            val keystoreFile = file(keystorePath)
-            if (keystoreFile.exists()) {
-                storeFile = keystoreFile
-                storePassword = (project.findProperty("RELEASE_KEYSTORE_PASSWORD") ?: System.getenv("RELEASE_KEYSTORE_PASSWORD") ?: "comicpulse").toString()
-                keyAlias = (project.findProperty("RELEASE_KEY_ALIAS") ?: System.getenv("RELEASE_KEY_ALIAS") ?: "comicpulse").toString()
-                keyPassword = (project.findProperty("RELEASE_KEY_PASSWORD") ?: System.getenv("RELEASE_KEY_PASSWORD") ?: "comicpulse").toString()
+            val keystorePropertiesFile = rootProject.file("keystore.properties")
+            val keystoreProps = Properties()
+            if (keystorePropertiesFile.exists()) {
+                keystorePropertiesFile.inputStream().use { keystoreProps.load(it) }
             }
+
+            val rawPath = keystoreProps.getProperty("storeFile")
+                ?: project.findProperty("RELEASE_KEYSTORE_PATH")?.toString()
+                ?: System.getenv("RELEASE_KEYSTORE_PATH")
+                ?: "keystore/comicpulse.keystore"
+
+            val candidate1 = rootProject.file(rawPath)
+            val candidate2 = project.file(rawPath)
+            val keystoreFile = if (candidate1.exists()) candidate1 else candidate2
+
+            println("Resolved release keystore: ${keystoreFile.absolutePath} (exists: ${keystoreFile.exists()})")
+
+            storeFile = keystoreFile
+            storePassword = keystoreProps.getProperty("storePassword")
+                ?: (project.findProperty("RELEASE_KEYSTORE_PASSWORD") ?: System.getenv("RELEASE_KEYSTORE_PASSWORD") ?: "comicpulse_key_2026").toString()
+            keyAlias = keystoreProps.getProperty("keyAlias")
+                ?: (project.findProperty("RELEASE_KEY_ALIAS") ?: System.getenv("RELEASE_KEY_ALIAS") ?: "comicpulse").toString()
+            keyPassword = keystoreProps.getProperty("keyPassword")
+                ?: (project.findProperty("RELEASE_KEY_PASSWORD") ?: System.getenv("RELEASE_KEY_PASSWORD") ?: "comicpulse_key_2026").toString()
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
         }
     }
 
